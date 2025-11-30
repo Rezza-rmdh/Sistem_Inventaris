@@ -99,27 +99,6 @@ public class LaporanKeuangan implements ILaporan {
         return sb.toString();
     }
     
-    // Method: generateStok() dengan validasi OCL
-    public String generateStok() {
-        // Pre-condition: periodeAwal <= periodeAkhir
-        if (periodeAwal.after(periodeAkhir)) {
-            throw new IllegalArgumentException("Periode awal harus lebih awal atau sama dengan periode akhir");
-        }
-        
-        // Implementation untuk generate stok
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== LAPORAN STOK ===\n");
-        // ... implementation detail
-        
-        this.isStokGenerated = true;
-        // Post-condition: self.isStokGenerated = true
-        if (!this.isStokGenerated) {
-            throw new IllegalStateException("Post-condition generateStok gagal");
-        }
-        
-        return sb.toString();
-    }
-    
     @Override
     public Map<String, Object> getData() {
         Map<String, Object> data = new HashMap<>();
