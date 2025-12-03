@@ -40,13 +40,7 @@ public class Barang implements Serializable {
     public void setKategori(String kategori) { this.kategori = kategori; }
     
     public double getHargaBeli() { return hargaBeli; }
-    public void setHargaBeli(double hargaBeli) { 
-        // Validasi OCL: Harga jual tidak boleh lebih rendah dari harga beli
-        if (this.hargaJual < hargaBeli) {
-            throw new IllegalArgumentException("Harga jual tidak boleh lebih rendah dari harga beli");
-        }
-        this.hargaBeli = hargaBeli; 
-    }
+    public void setHargaBeli(double hargaBeli) { this.hargaBeli = hargaBeli; }
     
     public double getHargaJual() { return hargaJual; }
     public void setHargaJual(double hargaJual) { 

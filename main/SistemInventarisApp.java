@@ -92,7 +92,15 @@ public class SistemInventarisApp {
     }
 
     private void showKelolaBarangMenu() {
-        if (!inventarisService.getPenggunaAktif().hasAccess("MANAGE_BARANG")) {
+        Pengguna user = inventarisService.getPenggunaAktif();
+    
+        if (user.getRole().equals("KASIR")) {
+            System.out.println("\n=== LIHAT BARANG (Kasir) ===");
+            lihatSemuaBarang();
+            return;
+        }
+
+        if (!inventarisService.getPenggunaAktif().hasAccess("KELOLA_BARANG")) {
             System.out.println("Anda tidak memiliki akses ke menu ini!");
             return;
         }
@@ -136,13 +144,13 @@ public class SistemInventarisApp {
             System.out.println("\n=== DAFTAR BARANG ===");
 
             // Header tabel
-            System.out.println("+------+----------------------+--------------+------------+------------+-------+");
-            System.out.println("|  ID  |      Nama Barang     |   Kategori   | Harga Beli | Harga Jual | Stok  |");
-            System.out.println("+------+----------------------+--------------+------------+------------+-------+");
+            System.out.println("+------+----------------------+--------------+----------------+----------------+-------+");
+            System.out.println("|  ID  |      Nama Barang     |   Kategori   |   Harga Beli   |   Harga Jual   | Stok  |");
+            System.out.println("+------+----------------------+--------------+----------------+----------------+-------+");
 
             // Data barang
             for (Barang barang : barangList) {
-                System.out.println(String.format("| %-4s | %-20s | %-12s | %10.2f | %10.2f | %-5d |",
+                System.out.println(String.format("| %-4s | %-20s | %-12s | %14.2f | %14.2f | %-5d |",
                         barang.getId(),
                         barang.getNama(),
                         barang.getKategori(),
@@ -151,7 +159,7 @@ public class SistemInventarisApp {
                         barang.getStok()));
             }
 
-            System.out.println("+------+----------------------+--------------+------------+------------+-------+");
+            System.out.println("+------+----------------------+--------------+----------------+----------------+-------+");
             System.out.println("Total Barang: " + barangList.size());
         }
     }
@@ -358,21 +366,21 @@ public class SistemInventarisApp {
             System.out.println("\n=== RIWAYAT TRANSAKSI ===");
 
             // Header tabel
-            System.out.println("+----------+------------+----------------+--------------+");
-            System.out.println("|    ID    |   Tanggal  | Jenis Transaksi|    Total     |");
-            System.out.println("+----------+------------+----------------+--------------+");
+            System.out.println("+----------+------------+----------------+----------------+");
+            System.out.println("|    ID    |   Tanggal  | Jenis Transaksi|     Total      |");
+            System.out.println("+----------+------------+----------------+----------------+");
 
             // Data transaksi
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat  dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             for (TransaksiContext transaksi : transaksiList) {
-                System.out.println(String.format("| %-8s | %-10s | %-14s | %-10d | %12.2f |",
+                System.out.println(String.format("| %-8s | %-10s | %-14s | %14.2f |",
                         transaksi.getId(),
-                        sdf.format(transaksi.getTanggal()),
+                        dateFormat.format(transaksi.getTanggal()),
                         transaksi.getJenisTransaksi(),
                         transaksi.hitungTotal()));
             }
 
-            System.out.println("+----------+------------+----------------+------------+--------------+");
+            System.out.println("+----------+------------+----------------+----------------+");
             System.out.println("Total Transaksi: " + transaksiList.size());
         }
     }
@@ -393,17 +401,18 @@ public class SistemInventarisApp {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        LaporanFactory factory = new LaporanKeuanganFactory(inventarisService);
-
         switch (choice) {
             case 1:
-                generateLaporanKeuangan(factory);
+                LaporanFactory keuanganFactory = new LaporanKeuanganFactory(inventarisService);
+                generateLaporanKeuangan(keuanganFactory);
                 break;
             case 2:
-                generateLaporanStok(factory);
+                LaporanFactory stokFactory = new LaporanStokFactory(inventarisService);
+                generateLaporanStok(stokFactory);
                 break;
             case 3:
-                generateLaporanDenganFilter(factory);
+                LaporanFactory filterFactory = new LaporanKeuanganFactory(inventarisService);
+                generateLaporanDenganFilter(filterFactory);
                 break;
             case 0:
                 break;
@@ -454,7 +463,7 @@ public class SistemInventarisApp {
     }
 
     private void showManajemenPenggunaMenu() {
-        if (!inventarisService.getPenggunaAktif().hasAccess("MANAGE_USERS")) {
+        if (!inventarisService.getPenggunaAktif().hasAccess("KELOLA_PENGGUNA")) {
             System.out.println("Anda tidak memiliki akses ke menu ini!");
             return;
         }

@@ -101,9 +101,10 @@ public class Pengguna implements Serializable {
             case "ADMIN":
                 return true;
             case "MANAGER":
-                return !feature.equals("MANAGE_USERS");
+                return !feature.equals("KELOLA_PENGGUNA");
             case "KASIR":
-                return feature.equals("INPUT_TRANSAKSI") || feature.equals("LIHAT_BARANG");
+                return feature.equals("INPUT_TRANSAKSI") || 
+                    feature.equals("LIHAT_LAPORAN");
             default:
                 return false;
         }

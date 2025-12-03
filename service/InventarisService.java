@@ -173,8 +173,11 @@ public class InventarisService {
         daftarBarang.add(barang);
         
         // Post-condition: barang harus ada dalam daftar
-        if (!daftarBarang.contains(barang)) {
-            daftarBarang.remove(barang);
+        boolean barangDitambahkan = daftarBarang.stream()
+            .anyMatch(b -> b.getId().equals(barang.getId()));
+        
+        if (!barangDitambahkan) {
+            daftarBarang.removeIf(b -> b.getId().equals(barang.getId()));
             throw new IllegalStateException("Post-condition inputBarang gagal");
         }
     }

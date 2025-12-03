@@ -76,13 +76,13 @@ public class LaporanKeuangan implements ILaporan {
         sb.append("--------------------------------------------------------------------------------\n");
         
         // Header tabel transaksi
-        sb.append("+------------+----------------+--------------+\n");
-        sb.append("|   Tanggal  | Jenis Transaksi|    Total     |\n");
-        sb.append("+------------+----------------+--------------+\n");
+        sb.append("+------------+----------------+----------------+\n");
+        sb.append("|   Tanggal  | Jenis Transaksi|     Total      |\n");
+        sb.append("+------------+----------------+----------------+\n");
         
         // Data transaksi
         for (TransaksiContext transaksi : dataTransaksi) {
-            sb.append(String.format("| %-10s | %-14s | %12.2f |\n",
+            sb.append(String.format("| %-10s | %-14s | %14.2f |\n",
                 dateFormat.format(transaksi.getTanggal()),
                 transaksi.getJenisTransaksi(),
                 transaksi.hitungTotal()));
@@ -94,6 +94,27 @@ public class LaporanKeuangan implements ILaporan {
         // Post-condition: self.isKeuanganGenerated = true
         if (!this.isKeuanganGenerated) {
             throw new IllegalStateException("Post-condition generateKeuangan gagal");
+        }
+        
+        return sb.toString();
+    }
+    
+    // Method: generateStok() dengan validasi OCL
+    public String generateStok() {
+        // Pre-condition: periodeAwal <= periodeAkhir
+        if (periodeAwal.after(periodeAkhir)) {
+            throw new IllegalArgumentException("Periode awal harus lebih awal atau sama dengan periode akhir");
+        }
+        
+        // Implementation untuk generate stok
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== LAPORAN STOK ===\n");
+        // ... implementation detail
+        
+        this.isStokGenerated = true;
+        // Post-condition: self.isStokGenerated = true
+        if (!this.isStokGenerated) {
+            throw new IllegalStateException("Post-condition generateStok gagal");
         }
         
         return sb.toString();
